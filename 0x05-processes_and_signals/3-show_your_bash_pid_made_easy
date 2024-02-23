@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# This script displays the PID and process name of processes whose name contains the word "bash"
+
+for pid in /proc/*/cmdline; do
+    if grep -q "bash" "$pid"; then
+        pid=$(basename "$(dirname "$pid")")
+        name=$(tr '\0' ' ' < "/proc/$pid/cmdline")
+        echo "$pid $name"
+    fi
+done
