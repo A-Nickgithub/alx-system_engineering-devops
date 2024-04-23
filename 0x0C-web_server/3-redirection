@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+# Bash script to configure Nginx redirection
+
+# Ensure Nginx is installed
+if ! command -v nginx &>/dev/null; then
+    echo "Nginx is not installed. Please install it first."
+    exit 1
+fi
+
+# Create a temporary configuration file for the redirection
+cat <<EOF > /etc/nginx/sites-available/redirect_me
+server {
+    listen 80;
+    listen [::]:80;
+
+    server_name _;
+
+    location /redirect_me {
+        return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
+    }
+
+    # Default server block for handling other requests
+    location / {
+        return 404;
+    }
+}
+EOF
+
+# Create a symbolic link to enable the site
+ln -s /etc/nginx/sites-available/redirect_me /etc/nginx/sites-enabled/
+
+# Test Nginx configuration
+nginx -t
+
+# Reload Nginx to apply changes
+nginx -s reload
