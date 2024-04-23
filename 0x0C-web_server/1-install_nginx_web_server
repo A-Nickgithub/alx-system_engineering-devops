@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# Bash script to install and configure Nginx web server
+
+# Install Nginx with the -y flag to assume yes to all prompts
+apt-get update
+apt-get install -y nginx
+
+# Create HTML file with "Hello World!" content
+echo "Hello World!" > /var/www/html/index.html
+
+# Check if Nginx is already running
+if pgrep -x "nginx" >/dev/null; then
+    # Nginx is running, reload configuration
+    nginx -s reload
+else
+    # Nginx is not running, start it
+    nginx
+fi
