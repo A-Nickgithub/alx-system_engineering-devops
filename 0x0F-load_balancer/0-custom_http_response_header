@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# Update package lists
+sudo apt update
+
+# Install Nginx
+sudo apt install -y nginx
+
+# Configure custom HTTP response header
+sudo bash -c 'cat <<EOF > /etc/nginx/conf.d/custom_headers.conf
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+
+    server_name _;
+
+    add_header X-Served-By \$hostname;
+
+    location / {
+        proxy_pass http://localhost:8080;
+    }
+}
+EOF'
+
+# Restart Nginx to apply changes
+sudo systemctl restart nginx
