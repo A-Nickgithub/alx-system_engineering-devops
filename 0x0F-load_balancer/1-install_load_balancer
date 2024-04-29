@@ -16,8 +16,8 @@ frontend webapp
 backend web_servers
     mode http
     balance roundrobin
-    server 246582-web-01 100.24.235.13:80 check
-    server 246582-web-02 54.144.138.199:80 check
+    server 246582-web-01 100.25.20.126:80 check
+    server 246582-web-02 35.174.213.184:80 check
 EOL
 
 # Restart HAProxy to apply changes
