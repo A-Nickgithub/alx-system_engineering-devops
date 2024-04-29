@@ -1,44 +1,29 @@
 #!/usr/bin/env bash
-# Install HAproxy and it should have the following configurations
-# configure haproxy on lb-01 server
-# Enable management via the init script
-# It should send traffic to web-01 and web-02 servers
-# Distribute requests using round-robin algorithm
+# Install HAProxy
+sudo apt update
+sudo apt install -y haproxy
 
-sudo apt-get update
-sudo apt-get install --no-install-recommends software-properties-common
-sudo add-apt-repository ppa:vbernat/haproxy-2.8
-sudo apt-get install haproxy=2.8.\*
+# Configure HAProxy
+sudo mv /etc/haproxy/haproxy.cfg /etc/haproxy/haproxy.cfg.backup
 
-echo "ENABLED=1" >> /etc/default/haproxy
-sudo mv /etc/haproxy/haproxy.cfg{,.original}
-sudo touch /etc/haproxy/haproxy.cfg
+sudo tee /etc/haproxy/haproxy.cfg > /dev/null <<EOL
 
-sudo printf %s "global
-    log 127.0.0.1 local0 notice
-    maxconn 2000
-    user haproxy
-    group haproxy
-defaults
-    log     global
-    mode    http
-    option  httplog
-    option  dontlognull
-    retries 3
-    option redispatch
-    timeout connect  5000
-    timeout client  10000
-    timeout server  10000
-listen hbnb
-    bind 0.0.0.0:80
+frontend webapp
+    bind *:80
     mode http
-    stats enable
-    stats uri /haproxy?stats
-    balance roundrobin
-    option httpclose
-    option forwardfor
-    server 130907-web-01 3.90.85.212:80 check
-    server 130907-web-02 52.203.214.248:80 check
-" >> /etc/haproxy/haproxy.cfg
+    default_backend web_servers
 
-sudo service haproxy restart
+backend web_servers
+    mode http
+    balance roundrobin
+    server 246582-web-01 100.24.235.13:80 check
+    server 246582-web-02 54.144.138.199:80 check
+EOL
+
+# Restart HAProxy to apply changes
+sudo systemctl restart haproxy
+
+# Enable HAProxy to start on boot
+sudo systemctl enable haproxy
+
+echo "HAProxy has been installed and configured successfully."
