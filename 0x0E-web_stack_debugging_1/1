@@ -1,3 +1,2 @@
-nginx: [emerg] a duplicate default server for 0.0.0.0:80 in /etc/nginx/sites-enabled/default:3
-nginx: configuration file /etc/nginx/nginx.conf test failed
-Error in Nginx configuration. Please check the syntax and try again.
+ * Restarting nginx nginx
+   ...fail!
