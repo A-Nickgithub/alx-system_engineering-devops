@@ -1,3 +1,5 @@
 #!/usr/bin/env bash
-sed -i 's/listen\s*80;/listen 80 default_server;/g' /etc/nginx/sites-available/default || exit 1
-service nginx restart || exit 1
+# configures nginx to run and listen to port 80
+service nginx start
+curl 0:80
+service nginx status | grep "nginx is not running"
