@@ -1,18 +1,9 @@
 #!/usr/bin/env bash
-# Bash script to install and configure Nginx web server
+#install nginx on my server ubuntu@100.25.20.126
 
-# Install Nginx with the -y flag to assume yes to all prompts
-sudo apt-get update
-sudo apt-get install -y nginx
+sudo apt update
+sudo apt upgrade -y
 
-# Create HTML file with "Hello World!" content
-echo "Hello World!" > /var/www/html/index.html
-
-# Check if Nginx is already running
-if pgrep -x "nginx" >/dev/null; then
-    # Nginx is running, reload configuration
-    nginx -s reload
-else
-    # Nginx is not running, start it
-    nginx
-fi
+sudo apt-get -y install nginx
+echo 'Hello World!' > /var/www/html/index.nginx-debian.html
+sudo service nginx restart
